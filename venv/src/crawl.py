@@ -34,10 +34,9 @@ def get_links_by_day(link_day, category_name):
         links = src.select('h3.knswli-title > a')
         count = 0
         for a in links:
-            # print(base_url + a.attrs['href'][1:])
             article = get_article_content(base_url + a.attrs['href'][1:])
-            f = codecs.open('../output/'+category_name+'.txt', encoding='utf8', mode='a+')
-            f.write(str(article))
+            f = open('../output/'+category_name+'.txt', encoding='utf8', mode='a+')
+            f.write(str(article['content']))
             f.write('\n')
             count += 1
             print(str(round(count*100/len(links), 2)) + "%")
@@ -49,18 +48,18 @@ def get_article_content(url):
     req = requests.get(url)
     if req.ok:
         src = bs4.BeautifulSoup(req.content, 'lxml')
-
-        title = src.select_one('h1.kbwc-title')
-        data['title'] = title.text.strip() if title else ''
-
-        head_title = src.select_one('h2.knc-sapo')
-        data['head_title'] = head_title.text.strip() if head_title else ''
+        #
+        # title = src.select_one('h1.kbwc-title')
+        # data['title'] = title.text.strip() if title else ''
+        #
+        # head_title = src.select_one('h2.knc-sapo')
+        # data['head_title'] = head_title.text.strip() if head_title else ''
 
         content = src.select_one('.knc-content')
         data['content'] = content.text.strip() if content else ''
-
-        pub_date = src.select_one('span.kbwcm-time')
-        data['pub_date'] = pub_date.text.strip() if pub_date else ''
+        #
+        # pub_date = src.select_one('span.kbwcm-time')
+        # data['pub_date'] = pub_date.text.strip() if pub_date else ''
     return data
 
 list_categories = ['star', 'tv-show', 'cine', 'musik', 'beauty-fashion', 'doi-song', 'an-ca-the-gioi', 'xa-hoi', 'the-gioi', 'sport', 'hoc-duong']
