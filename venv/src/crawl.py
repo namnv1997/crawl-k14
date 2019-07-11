@@ -62,5 +62,16 @@ def get_article_content(url):
         # data['pub_date'] = pub_date.text.strip() if pub_date else ''
     return data
 
+def update_object_s3(list_categories, bucketName):
+    s3 = boto3.client('s3')
+    for cate in list_categories:
+        file_name_computer = '../output/' + cate + '.txt'
+        file_name_aws = base_url + cate + '.txt'
+        try:
+            response = s3.upload_file(file_name_computer, bucketName, file_name_aws)
+        except Exception:
+            return None
+    return response
 list_categories = ['star', 'tv-show', 'cine', 'musik', 'beauty-fashion', 'doi-song', 'an-ca-the-gioi', 'xa-hoi', 'the-gioi', 'sport', 'hoc-duong']
 crawl_data_by_categories(list_categories)
+update_object_s3(list_categories, 'sia-03-project-data-source-2')
